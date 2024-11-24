@@ -10,6 +10,10 @@ import (
 type CustomerRepositoryInterface interface {
 	LoadAll() ([]models.Customer, error)
 	LoadByUsername(username string) (*models.Customer, error)
+	SaveCustomers([]models.Customer) error
+	FindCustomerByID(customerID string) (*models.Customer, error)
+	MarkCustomerAsLoggedOut(customerID string) error
+	MarkCustomerAsLoggedIn(customerID string) error
 }
 
 type JSONCustomerRepository struct {
@@ -55,4 +59,83 @@ func (repo *JSONCustomerRepository) LoadByUsername(username string) (*models.Cus
 		}
 	}
 	return nil, errors.New("customer not found")
+}
+
+func (repo *JSONCustomerRepository) FindCustomerByID(customerID string) (*models.Customer, error) {
+	customers, err := repo.LoadAll()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, customer := range customers {
+		if customer.ID == customerID {
+			return &customer, nil
+		}
+	}
+
+	return nil, errors.New("customer not found")
+}
+
+func (repo *JSONCustomerRepository) SaveCustomers(customers []models.Customer) error {
+	file, err := os.Create(repo.FilePath)
+	if err != nil {
+		return err
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
+
+	encoder := json.NewEncoder(file)
+	err = encoder.Encode(customers)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (repo *JSONCustomerRepository) MarkCustomerAsLoggedOut(customerID string) error {
+	customers, err := repo.LoadAll()
+	if err != nil {
+		return err
+	}
+
+	for i, customer := range customers {
+		if customer.ID == customerID {
+			if customer.IsLoggedOut {
+				return errors.New("customer has already logged out")
+			}
+			customers[i].IsLoggedOut = true
+			err := repo.SaveCustomers(customers)
+			if err != nil {
+				return err
+			}
+			return nil
+		}
+	}
+
+	return errors.New("customer not found")
+}
+
+func (repo *JSONCustomerRepository) MarkCustomerAsLoggedIn(username string) error {
+	customers, err := repo.LoadAll()
+	if err != nil {
+		return err
+	}
+
+	for i, customer := range customers {
+		if customer.Username == username {
+			customers[i].IsLoggedOut = false
+			err := repo.SaveCustomers(customers)
+			if err != nil {
+				return err
+			}
+			return nil
+		}
+	}
+
+	return errors.New("customer not found")
 }

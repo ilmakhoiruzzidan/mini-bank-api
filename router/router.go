@@ -22,15 +22,25 @@ func InitRouter(router *gin.Engine) {
 	authService := services.NewAuthService(customerRepository, historyRepository)
 	authHandler := handlers.NewAuthHandler(authService)
 
+	// DI Merchant
+	merchantRepository := repository.NewJSONMerchantRepository()
+
+	// DI transaction
+	transactionRepository := repository.NewJSONTransactionRepository()
+	transactionService := services.NewTransactionService(transactionRepository, merchantRepository, historyRepository)
+	transactionHandler := handlers.NewTransactionHandler(transactionService)
+
 	// public route
 	router.POST("/auth/login", authHandler.Login)
 
 	// protected (need auth)
 	protected := router.Group("/")
-	protected.Use(middlewares.JWTMiddleware())
+	protected.Use(middlewares.JWTMiddleware(customerRepository))
 	{
 		protected.POST("/auth/logout", authHandler.Logout)
 		protected.GET("/customers", customerHandler.GetAllCustomers)
+
+		protected.POST("/transactions", transactionHandler.CreateTransaction)
 
 	}
 

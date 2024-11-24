@@ -35,8 +35,17 @@ func (auth *AuthService) Login(username, password string) (string, error) {
 		return "", errors.New("invalid credentials")
 	}
 
+	if !customer.IsLoggedOut {
+		return "", errors.New("you already logged in")
+	}
+
 	if customer.Username != username || customer.Password != password {
 		return "", errors.New("invalid credentials")
+	}
+
+	err = auth.customerRepo.MarkCustomerAsLoggedIn(username)
+	if err != nil {
+		return "", err
 	}
 
 	// log
@@ -65,10 +74,25 @@ func (auth *AuthService) Logout(token string) error {
 		return errors.New("failed to parse ID")
 	}
 
+	customer, err := auth.customerRepo.FindCustomerByID(CustomerID)
+	if err != nil {
+		return err
+	}
+
+	if customer.IsLoggedOut {
+		return errors.New("you are already logged out")
+	}
+
 	err = auth.historyRepo.LogAction(CustomerID, "logout")
 	if err != nil {
 		return err
 	}
+
+	err = auth.customerRepo.MarkCustomerAsLoggedOut(CustomerID)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -76,7 +100,7 @@ func generateJWT(user *models.Customer) (string, error) {
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":       user.ID,
 		"username": user.Username,
-		"exp":      time.Now().Add(24 * time.Hour).Unix(),
+		"exp":      time.Now().Add(10 * time.Minute).Unix(),
 	})
 
 	secretKey := []byte(getSecretKey())

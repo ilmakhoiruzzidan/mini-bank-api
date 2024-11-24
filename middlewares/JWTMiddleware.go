@@ -7,6 +7,7 @@ import (
 	"github.com/joho/godotenv"
 	"log"
 	"mini-bank-api/models"
+	"mini-bank-api/repository"
 	"net/http"
 	"os"
 	"strings"
@@ -25,7 +26,7 @@ func getSecretKey() string {
 	return secretKey
 }
 
-func JWTMiddleware() gin.HandlerFunc {
+func JWTMiddleware(customerRepo repository.CustomerRepositoryInterface) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
@@ -64,6 +65,25 @@ func JWTMiddleware() gin.HandlerFunc {
 			customer := &models.Customer{
 				ID:       claims["id"].(string),
 				Username: claims["username"].(string),
+			}
+
+			cust, err := customerRepo.FindCustomerByID(customer.ID)
+			if err != nil {
+				c.JSON(http.StatusUnauthorized, gin.H{
+					"status": http.StatusUnauthorized,
+					"error":  "Customer not found",
+				})
+				c.Abort()
+				return
+			}
+
+			if cust.IsLoggedOut {
+				c.JSON(http.StatusUnauthorized, gin.H{
+					"status": http.StatusUnauthorized,
+					"error":  "You have logged out. Please log in again",
+				})
+				c.Abort()
+				return
 			}
 
 			c.Set("customer", customer)

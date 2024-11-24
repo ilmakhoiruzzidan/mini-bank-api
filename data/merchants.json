@@ -1,10 +1,12 @@
 [
   {
     "id": "1",
-    "name": "Amazon"
+    "name": "Warung Bahari",
+    "balance": 0
   },
   {
     "id": "2",
-    "name": "Ebay"
+    "name": "Toko Pak Edi",
+    "balance": 0
   }
 ]
