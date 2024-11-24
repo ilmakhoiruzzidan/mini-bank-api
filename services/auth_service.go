@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/joho/godotenv"
 	"log"
@@ -44,16 +45,27 @@ func (auth *AuthService) Login(username, password string) (string, error) {
 		return "", err
 	}
 
-	token, err := generateJWT(customer)
+	accessToken, err := generateJWT(customer)
+
 	if err != nil {
 		return "", err
 	}
 
-	return token, nil
+	return accessToken, nil
 }
 
 func (auth *AuthService) Logout(token string) error {
-	err := auth.historyRepo.LogAction(token, "logout")
+	claims, err := parseToken(token)
+	if err != nil {
+		return err
+	}
+
+	CustomerID, ok := claims["id"].(string)
+	if !ok {
+		return errors.New("failed to parse ID")
+	}
+
+	err = auth.historyRepo.LogAction(CustomerID, "logout")
 	if err != nil {
 		return err
 	}
@@ -74,6 +86,25 @@ func generateJWT(user *models.Customer) (string, error) {
 	}
 
 	return accessToken, nil
+}
+
+func parseToken(tokenString string) (jwt.MapClaims, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(getSecretKey()), nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims, nil
+	}
+
+	return nil, errors.New("invalid token")
 }
 
 func getSecretKey() string {

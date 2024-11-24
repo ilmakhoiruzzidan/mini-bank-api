@@ -37,10 +37,11 @@ func JWTMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
-		fmt.Println("tokenstring:", tokenString)
+		accessToken := strings.TrimPrefix(authHeader, "Bearer ")
 
-		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		c.Set("accessToken", accessToken)
+
+		token, err := jwt.Parse(accessToken, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf(
 					"unexpected signing method: %v",

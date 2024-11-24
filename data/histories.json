@@ -68,5 +68,54 @@
     "action": "login",
     "amount": 0,
     "timestamp": "2024-11-24T13:48:04.78799024+07:00"
+  },
+  {
+    "id": "a59a1b3d-c86b-4e0e-929a-1cde8cfb2cfe",
+    "customer_id": "1",
+    "action": "login",
+    "amount": 0,
+    "timestamp": "2024-11-24T14:17:22.591083727+07:00"
+  },
+  {
+    "id": "d10d1cd0-d80e-4a84-8927-8e002dc14953",
+    "customer_id": "1",
+    "action": "login",
+    "amount": 0,
+    "timestamp": "2024-11-24T15:31:22.658679408+07:00"
+  },
+  {
+    "id": "2f04de29-0b59-45af-9b94-b570adba1537",
+    "customer_id": "1",
+    "action": "login",
+    "amount": 0,
+    "timestamp": "2024-11-24T15:33:20.697423819+07:00"
+  },
+  {
+    "id": "a5dffe52-30f3-486b-bac7-53e7771dcd64",
+    "customer_id": "1",
+    "action": "login",
+    "amount": 0,
+    "timestamp": "2024-11-24T15:35:04.332748503+07:00"
+  },
+  {
+    "id": "772d44c9-185d-4099-9e47-1981a5b40537",
+    "customer_id": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzI1MjM3MDQsImlkIjoiMSIsInVzZXJuYW1lIjoiY3VzdG9tZXIxIn0._dgG10eIvunIcGP10mw52OeCDACHCRSa5JxI0kNxL8k",
+    "action": "logout",
+    "amount": 0,
+    "timestamp": "2024-11-24T15:35:06.933276636+07:00"
+  },
+  {
+    "id": "f0a6b6c7-a199-4cef-8c5b-cc6b65834d61",
+    "customer_id": "1",
+    "action": "login",
+    "amount": 0,
+    "timestamp": "2024-11-24T15:40:18.458124903+07:00"
+  },
+  {
+    "id": "9c9f1bad-b751-4f6f-819e-5c0326003218",
+    "customer_id": "1",
+    "action": "logout",
+    "amount": 0,
+    "timestamp": "2024-11-24T15:40:21.354475116+07:00"
   }
 ]

@@ -7,12 +7,12 @@ import (
 )
 
 type AuthHandler struct {
-	Service services.AuthServiceInterface
+	authService services.AuthServiceInterface
 }
 
-func NewAuthHandler(service services.AuthServiceInterface) *AuthHandler {
+func NewAuthHandler(authService services.AuthServiceInterface) *AuthHandler {
 	return &AuthHandler{
-		Service: service,
+		authService: authService,
 	}
 }
 
@@ -30,7 +30,7 @@ func (handler *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
-	token, err := handler.Service.Login(request.Username, request.Password)
+	accessToken, err := handler.authService.Login(request.Username, request.Password)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"status": http.StatusUnauthorized,
@@ -38,13 +38,44 @@ func (handler *AuthHandler) Login(c *gin.Context) {
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"status":      http.StatusOK,
 		"message":     "login success",
-		"accessToken": token,
+		"accessToken": accessToken,
 	})
 }
 
 func (handler *AuthHandler) Logout(c *gin.Context) {
-	//handler.Service.Logout
+	accessToken, exists := c.Get("accessToken")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"status":  http.StatusUnauthorized,
+			"message": "Unauthorized request",
+		})
+		return
+	}
+
+	tokenString, ok := accessToken.(string)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  http.StatusInternalServerError,
+			"message": "Invalid token format",
+		})
+		return
+	}
+
+	err := handler.authService.Logout(tokenString)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  http.StatusInternalServerError,
+			"message": "Failed to logout: " + err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  http.StatusOK,
+		"message": "logout success",
+	})
 }
