@@ -5,18 +5,18 @@ import (
 	"mini-bank-api/repository"
 )
 
-type CustomerService interface {
+type CustomerServiceInterface interface {
 	GetAllCustomers() ([]models.Customer, error)
 }
 
-type CustomerServiceImpl struct {
-	repo repository.CustomerRepository
+type CustomerService struct {
+	repo repository.CustomerRepositoryInterface
 }
 
-func NewCustomerService(repo repository.CustomerRepository) *CustomerServiceImpl {
-	return &CustomerServiceImpl{repo: repo}
+func NewCustomerService(repo repository.CustomerRepositoryInterface) CustomerServiceInterface {
+	return &CustomerService{repo: repo}
 }
 
-func (si *CustomerServiceImpl) GetAllCustomers() ([]models.Customer, error) {
+func (si *CustomerService) GetAllCustomers() ([]models.Customer, error) {
 	return si.repo.LoadAll()
 }

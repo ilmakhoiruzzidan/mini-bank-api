@@ -7,10 +7,10 @@ import (
 )
 
 type CustomerHandler struct {
-	Service services.CustomerService
+	Service services.CustomerServiceInterface
 }
 
-func NewCustomerHandler(service services.CustomerService) *CustomerHandler {
+func NewCustomerHandler(service services.CustomerServiceInterface) *CustomerHandler {
 	return &CustomerHandler{
 		Service: service,
 	}
