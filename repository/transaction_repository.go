@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"github.com/goccy/go-json"
 	"github.com/google/uuid"
 	"io"
@@ -28,6 +29,7 @@ func (repo *JSONTransactionRepository) SaveTransaction(senderId, merchantID stri
 	if err != nil {
 		return "", err
 	}
+
 	newTransaction := models.Transaction{
 		ID:         uuid.New().String(),
 		SenderID:   senderId,
@@ -37,18 +39,19 @@ func (repo *JSONTransactionRepository) SaveTransaction(senderId, merchantID stri
 	}
 	transactions = append(transactions, newTransaction)
 
-	file, err := os.OpenFile(repo.FilePath, os.O_RDWR|os.O_CREATE, os.ModePerm)
+	file, err := os.Create(repo.FilePath)
 	if err != nil {
 		return "", err
 	}
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-
+	defer func() {
+		if cerr := file.Close(); cerr != nil {
+			fmt.Println("Error closing file:", cerr)
 		}
-	}(file)
+	}()
 
-	err = json.NewEncoder(file).Encode(transactions)
+	encoder := json.NewEncoder(file)
+	encoder.SetIndent("", "  ")
+	err = encoder.Encode(transactions)
 	if err != nil {
 		return "", err
 	}

@@ -334,5 +334,23 @@
     "customer_id": "1",
     "action": "check profile",
     "timestamp": "2024-11-25T14:05:20.594982592+07:00"
+  },
+  {
+    "id": "1dfa5aa7-1df9-49f4-8b77-a54a3394a0bd",
+    "customer_id": "1",
+    "action": "payment",
+    "timestamp": "2024-11-25T14:09:53.687860153+07:00"
+  },
+  {
+    "id": "8d76ae03-18af-45d6-aaee-75f09e90fd19",
+    "customer_id": "1",
+    "action": "payment",
+    "timestamp": "2024-11-25T14:15:19.469204204+07:00"
+  },
+  {
+    "id": "01e44528-e940-4f63-8d15-583f02f66e32",
+    "customer_id": "1",
+    "action": "payment",
+    "timestamp": "2024-11-25T14:15:32.08251448+07:00"
   }
 ]
