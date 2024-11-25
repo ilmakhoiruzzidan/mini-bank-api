@@ -9,6 +9,6 @@
     "id": "3",
     "username": "customer3",
     "password": "password",
-    "is_logged_out": false
+    "is_logged_out": true
   }
 ]

@@ -3,6 +3,7 @@ package repository
 import (
 	"github.com/goccy/go-json"
 	"github.com/google/uuid"
+	"io"
 	"mini-bank-api/models"
 	"os"
 	"time"
@@ -27,7 +28,6 @@ func (repo *JSONTransactionRepository) SaveTransaction(senderId, merchantID stri
 	if err != nil {
 		return "", err
 	}
-
 	newTransaction := models.Transaction{
 		ID:         uuid.New().String(),
 		SenderID:   senderId,
@@ -37,11 +37,10 @@ func (repo *JSONTransactionRepository) SaveTransaction(senderId, merchantID stri
 	}
 	transactions = append(transactions, newTransaction)
 
-	file, err := os.Create(repo.FilePath)
+	file, err := os.OpenFile(repo.FilePath, os.O_RDWR|os.O_CREATE, os.ModePerm)
 	if err != nil {
 		return "", err
 	}
-
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
@@ -58,7 +57,7 @@ func (repo *JSONTransactionRepository) SaveTransaction(senderId, merchantID stri
 }
 
 func (repo *JSONTransactionRepository) LoadTransactions() ([]models.Transaction, error) {
-	file, err := os.Open("transactions.json")
+	file, err := os.Open(repo.FilePath)
 	if err != nil {
 		if os.IsNotExist(err) {
 			return []models.Transaction{}, nil
@@ -74,8 +73,8 @@ func (repo *JSONTransactionRepository) LoadTransactions() ([]models.Transaction,
 
 	var transactions []models.Transaction
 	err = json.NewDecoder(file).Decode(&transactions)
-	if err != nil {
-		return nil, err
+	if err == io.EOF {
+		return []models.Transaction{}, nil
 	}
 
 	return transactions, nil

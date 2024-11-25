@@ -226,5 +226,71 @@
     "customer_id": "1",
     "action": "login",
     "timestamp": "2024-11-25T00:01:10.575826119+07:00"
+  },
+  {
+    "id": "bc97b134-29a1-4aaa-9aab-3f9632c8a0e4",
+    "customer_id": "1",
+    "action": "login",
+    "timestamp": "2024-11-25T09:39:59.467980331+07:00"
+  },
+  {
+    "id": "e37b365c-3036-463b-a276-6085ffbbe60a",
+    "customer_id": "1",
+    "action": "logout",
+    "timestamp": "2024-11-25T09:40:09.960661092+07:00"
+  },
+  {
+    "id": "a02bbea0-113b-4772-8f5f-66826c7efeda",
+    "customer_id": "1",
+    "action": "login",
+    "timestamp": "2024-11-25T09:42:57.175452254+07:00"
+  },
+  {
+    "id": "914c8427-eff0-4871-8a5f-443a3fe87de0",
+    "customer_id": "1",
+    "action": "login",
+    "timestamp": "2024-11-25T09:57:53.392135631+07:00"
+  },
+  {
+    "id": "0f735327-49fd-455e-bf7a-449c64a003e2",
+    "customer_id": "1",
+    "action": "login",
+    "timestamp": "2024-11-25T10:37:58.132840521+07:00"
+  },
+  {
+    "id": "723f532b-bdf8-4b6e-8221-c2467fdd67dc",
+    "customer_id": "1",
+    "action": "payment",
+    "timestamp": "2024-11-25T11:02:20.703796047+07:00"
+  },
+  {
+    "id": "a8916a2c-b643-4f50-9a9f-e529c0a925d5",
+    "customer_id": "1",
+    "action": "payment",
+    "timestamp": "2024-11-25T11:02:46.54835584+07:00"
+  },
+  {
+    "id": "fb906b0c-aebc-4f3a-9176-1f4931b821c4",
+    "customer_id": "1",
+    "action": "payment",
+    "timestamp": "2024-11-25T11:04:53.316444018+07:00"
+  },
+  {
+    "id": "22a89b68-60c5-478e-a7d3-4131d305258e",
+    "customer_id": "1",
+    "action": "payment",
+    "timestamp": "2024-11-25T11:43:11.332652681+07:00"
+  },
+  {
+    "id": "e2e2b1ae-4d53-40bb-b885-0dcfaf553c35",
+    "customer_id": "1",
+    "action": "payment",
+    "timestamp": "2024-11-25T11:48:50.37411091+07:00"
+  },
+  {
+    "id": "64d7f540-611f-4b1c-b75f-cf7e98232d6a",
+    "customer_id": "1",
+    "action": "payment",
+    "timestamp": "2024-11-25T11:49:08.233284849+07:00"
   }
 ]

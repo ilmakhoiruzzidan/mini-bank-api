@@ -100,7 +100,7 @@ func generateJWT(user *models.Customer) (string, error) {
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":       user.ID,
 		"username": user.Username,
-		"exp":      time.Now().Add(10 * time.Minute).Unix(),
+		"exp":      time.Now().Add(24 * time.Hour).Unix(),
 	})
 
 	secretKey := []byte(getSecretKey())

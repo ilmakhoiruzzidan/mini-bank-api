@@ -39,7 +39,6 @@ func InitRouter(router *gin.Engine) {
 	{
 		protected.POST("/auth/logout", authHandler.Logout)
 		protected.GET("/customers", customerHandler.GetAllCustomers)
-
 		protected.POST("/transactions", transactionHandler.CreateTransaction)
 
 	}

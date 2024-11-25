@@ -1,12 +1,7 @@
 [
   {
     "id": "1",
-    "name": "Warung Bahari",
-    "balance": 0
-  },
-  {
-    "id": "2",
-    "name": "Toko Pak Edi",
-    "balance": 0
+    "name": "toko pak edi",
+    "balance": 240000
   }
 ]

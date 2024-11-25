@@ -84,7 +84,7 @@ func (repo *JSONCustomerRepository) SaveCustomers(customers []models.Customer) e
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-
+			println(err.Error())
 		}
 	}(file)
 

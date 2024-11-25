@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 	"github.com/goccy/go-json"
 	"mini-bank-api/models"
 	"os"
@@ -9,6 +10,8 @@ import (
 
 type MerchantRepositoryInterface interface {
 	LoadAll() ([]models.Merchant, error)
+	SaveMerchants(merchants []models.Merchant) error
+	UpdateMerchantBalance(merchants []models.Merchant, merchantID string, amount float64) error
 	FindMerchantByID(merchantID string) (*models.Merchant, error)
 }
 
@@ -29,6 +32,9 @@ func (repo *JSONMerchantRepository) LoadAll() ([]models.Merchant, error) {
 		return nil, err
 	}
 
+	if len(data) == 0 {
+		return merchants, nil
+	}
 	err = json.Unmarshal(data, &merchants)
 	if err != nil {
 		return nil, err
@@ -49,4 +55,41 @@ func (repo *JSONMerchantRepository) FindMerchantByID(merchantID string) (*models
 		}
 	}
 	return nil, errors.New("merchant not found")
+}
+
+func (repo *JSONMerchantRepository) SaveMerchants(merchants []models.Merchant) error {
+	file, err := os.Create(repo.FilePath)
+	if err != nil {
+		return err
+	}
+
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			fmt.Println("Error closing file:", err)
+		}
+	}(file)
+
+	err = json.NewEncoder(file).Encode(merchants)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (repo *JSONMerchantRepository) UpdateMerchantBalance(merchants []models.Merchant, merchantID string, amount float64) error {
+	for i, merchant := range merchants {
+		if merchant.ID == merchantID {
+			merchants[i].Balance += amount
+			break
+		}
+	}
+
+	err := repo.SaveMerchants(merchants)
+
+	if err != nil {
+		return err
+	}
+
+	return err
 }

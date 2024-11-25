@@ -20,8 +20,8 @@ func NewTransactionHandler(transactionService services.TransactionServiceInterfa
 
 func (handler *TransactionHandler) CreateTransaction(c *gin.Context) {
 	var paymentRequest struct {
-		RecipientId string  `json:"recipient_id"`
-		Amount      float64 `json:"amount"`
+		MerchantID string  `json:"merchant_id"`
+		Amount     float64 `json:"amount"`
 	}
 
 	if err := c.ShouldBindJSON(&paymentRequest); err != nil {
@@ -50,10 +50,12 @@ func (handler *TransactionHandler) CreateTransaction(c *gin.Context) {
 		return
 	}
 	senderID := customer.ID
+	transactionId, err := handler.transactionService.ProcessTransaction(senderID, paymentRequest.MerchantID, paymentRequest.Amount)
 
-	transactionId, err := handler.transactionService.ProcessTransaction(senderID, paymentRequest.RecipientId, paymentRequest.Amount)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  http.StatusBadRequest,
+			"message": err.Error()})
 		return
 	}
 
@@ -63,7 +65,7 @@ func (handler *TransactionHandler) CreateTransaction(c *gin.Context) {
 		"data": gin.H{
 			"transaction_id": transactionId,
 			"sender_id":      senderID,
-			"recipient_id":   paymentRequest.RecipientId,
+			"merchant_id":    paymentRequest.MerchantID,
 			"amount":         paymentRequest.Amount,
 			"timestamp":      time.Now(),
 		},

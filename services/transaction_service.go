@@ -30,8 +30,8 @@ func (transaction *TransactionService) ProcessTransaction(senderID, merchantID s
 	if amount <= 0 {
 		return "", errors.New("amount must be greater than 0")
 	}
-
 	merchants, err := transaction.merchantRepo.LoadAll()
+
 	if err != nil {
 		return "", err
 	}
@@ -40,9 +40,16 @@ func (transaction *TransactionService) ProcessTransaction(senderID, merchantID s
 	for _, merchant := range merchants {
 		if merchant.ID == merchantID {
 			merchantExists = true
+
 			break
 		}
 	}
+
+	err = transaction.merchantRepo.UpdateMerchantBalance(merchants, merchantID, amount)
+	if err != nil {
+		return "", err
+	}
+
 	if !merchantExists {
 		return "", errors.New("merchant id does not exist")
 	}

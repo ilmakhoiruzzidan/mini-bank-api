@@ -48,6 +48,7 @@ func JWTMiddleware(customerRepo repository.CustomerRepositoryInterface) gin.Hand
 					"unexpected signing method: %v",
 					token.Header["alg"])
 			}
+
 			secretKey := []byte(getSecretKey())
 			return secretKey, nil
 		})
@@ -89,7 +90,10 @@ func JWTMiddleware(customerRepo repository.CustomerRepositoryInterface) gin.Hand
 			c.Set("customer", customer)
 
 		} else {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"status": http.StatusUnauthorized,
+				"error":  "Invalid or expired token",
+			})
 			c.Abort()
 			return
 		}
