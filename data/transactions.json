@@ -4,76 +4,83 @@
     "sender_id": "1",
     "merchant_id": "2",
     "amount": 120002,
-    "timestamp": "2024-11-25T11:02:20.703589371+07:00"
+    "created_at": "0001-01-01T00:00:00Z"
   },
   {
     "transaction_id": "7798c9c4-d241-4724-b9c8-d627d61156c9",
     "sender_id": "1",
     "merchant_id": "2",
     "amount": 120002,
-    "timestamp": "2024-11-25T11:02:46.54818126+07:00"
+    "created_at": "0001-01-01T00:00:00Z"
   },
   {
     "transaction_id": "be65a0a1-0972-4936-9641-8650cc0319e3",
     "sender_id": "1",
     "merchant_id": "2",
     "amount": 120002,
-    "timestamp": "2024-11-25T11:04:53.316288725+07:00"
+    "created_at": "0001-01-01T00:00:00Z"
   },
   {
     "transaction_id": "d25e92e1-be9c-4b3a-ab00-e3eb0e3b59d4",
     "sender_id": "1",
     "merchant_id": "1",
     "amount": 20000,
-    "timestamp": "2024-11-25T11:43:11.332508739+07:00"
+    "created_at": "0001-01-01T00:00:00Z"
   },
   {
     "transaction_id": "ffbedbb9-e13d-4e14-b959-88c8eaeb6de6",
     "sender_id": "1",
     "merchant_id": "1",
     "amount": 20000,
-    "timestamp": "2024-11-25T11:48:50.373988273+07:00"
+    "created_at": "0001-01-01T00:00:00Z"
   },
   {
     "transaction_id": "0f8f6d62-179c-46db-bcc4-edb226100180",
     "sender_id": "1",
     "merchant_id": "1",
     "amount": 220000,
-    "timestamp": "2024-11-25T11:49:08.233199673+07:00"
+    "created_at": "0001-01-01T00:00:00Z"
   },
   {
     "transaction_id": "9e2379b3-6205-4bc9-9635-e8dccbd2d1ed",
     "sender_id": "1",
     "merchant_id": "1",
     "amount": 220000,
-    "timestamp": "2024-11-25T14:00:24.151296501+07:00"
+    "created_at": "0001-01-01T00:00:00Z"
   },
   {
     "transaction_id": "9ee053c2-6126-447c-9e1d-003cc746f1da",
     "sender_id": "1",
     "merchant_id": "1",
     "amount": 220000,
-    "timestamp": "2024-11-25T14:09:53.687703758+07:00"
+    "created_at": "0001-01-01T00:00:00Z"
   },
   {
     "transaction_id": "954a8158-b232-45c6-a7b4-d6fcc9b3c820",
     "sender_id": "1",
     "merchant_id": "1",
     "amount": 220000,
-    "timestamp": "2024-11-25T14:15:19.469033126+07:00"
+    "created_at": "0001-01-01T00:00:00Z"
   },
   {
     "transaction_id": "1cf6ac84-4618-4f74-90c0-c8f0b862dd8f",
     "sender_id": "1",
     "merchant_id": "1",
     "amount": 220000,
-    "timestamp": "2024-11-25T14:15:32.082372903+07:00"
+    "created_at": "0001-01-01T00:00:00Z"
   },
   {
     "transaction_id": "97fa4b3a-cd38-4a06-8335-e8ef53c35785",
     "sender_id": "1",
     "merchant_id": "1",
     "amount": 80000,
-    "timestamp": "2024-11-25T14:55:54.142788405+07:00"
+    "created_at": "0001-01-01T00:00:00Z"
+  },
+  {
+    "transaction_id": "cd077115-f7f2-4ec0-a67c-398c0d184e5a",
+    "sender_id": "1",
+    "merchant_id": "1",
+    "amount": 1240,
+    "created_at": "2024-11-25T16:34:56.790782584+07:00"
   }
 ]

@@ -76,6 +76,11 @@ func (handler *AuthHandler) GetCurrentUser(c *gin.Context) {
 		utils.ErrorResponse(c, http.StatusUnauthorized, "You're not authorized to access this resource", err.Error())
 	}
 
-	utils.SuccessResponse(c, currentUser, "success retrieve current user")
+	profile := utils.CustomerProfile{
+		ID:       currentUser.ID,
+		Username: currentUser.Username,
+	}
+	//utils.SuccessResponse(c, currentUser, "success retrieve current user")
+	utils.CurrentUserResponse(c, profile, "success retrieve current user")
 
 }

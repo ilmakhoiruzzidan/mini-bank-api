@@ -12,6 +12,31 @@ type Response struct {
 	Error   string      `json:"error,omitempty"` // Omit if no error
 }
 
+type LoginResponseDTO struct {
+	Status      int         `json:"status"`
+	Message     string      `json:"message"`
+	AccessToken interface{} `json:"access_token"`
+}
+
+type CustomerProfile struct {
+	ID       string `json:"id"`
+	Username string `json:"username"`
+}
+
+func CurrentUserResponse(c *gin.Context, data interface{}, message string) {
+	profile, ok := data.(CustomerProfile)
+	if !ok {
+		ErrorResponse(c, http.StatusInternalServerError, "Invalid data format", "Expected CustomerProfile format")
+		return
+	}
+	response := Response{
+		Status:  http.StatusOK,
+		Message: message,
+		Data:    profile,
+	}
+	c.JSON(http.StatusOK, response)
+}
+
 func SuccessResponse(c *gin.Context, data interface{}, message string) {
 	response := Response{
 		Status:  http.StatusOK,
@@ -22,10 +47,10 @@ func SuccessResponse(c *gin.Context, data interface{}, message string) {
 }
 
 func LoginResponse(c *gin.Context, accessToken interface{}, message string) {
-	c.JSON(http.StatusOK, gin.H{
-		"status":      http.StatusOK,
-		"accessToken": accessToken,
-		"message":     message,
+	c.JSON(http.StatusOK, LoginResponseDTO{
+		Status:      http.StatusOK,
+		Message:     message,
+		AccessToken: accessToken,
 	})
 }
 

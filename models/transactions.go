@@ -7,5 +7,5 @@ type Transaction struct {
 	SenderID   string    `json:"sender_id"`
 	MerchantID string    `json:"merchant_id"`
 	Amount     float64   `json:"amount"`
-	Timestamp  time.Time `json:"timestamp"`
+	CreatedAt  time.Time `json:"created_at"`
 }

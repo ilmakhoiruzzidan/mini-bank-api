@@ -35,7 +35,7 @@ func (repo *JSONTransactionRepository) SaveTransaction(senderId, merchantID stri
 		SenderID:   senderId,
 		MerchantID: merchantID,
 		Amount:     amount,
-		Timestamp:  time.Now(),
+		CreatedAt:  time.Now(),
 	}
 	transactions = append(transactions, newTransaction)
 

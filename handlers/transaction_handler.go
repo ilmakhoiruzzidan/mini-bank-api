@@ -56,6 +56,6 @@ func (handler *TransactionHandler) CreateTransaction(c *gin.Context) {
 			"sender_id":      senderID,
 			"merchant_id":    paymentRequest.MerchantID,
 			"amount":         paymentRequest.Amount,
-			"timestamp":      time.Now(),
+			"created_at":     time.Now(),
 		}, "Payment successful")
 }
