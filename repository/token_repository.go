@@ -123,5 +123,6 @@ func InitializeRevokedTokensFile(filePath string) error {
 			return err
 		}
 	}
+
 	return nil
 }
