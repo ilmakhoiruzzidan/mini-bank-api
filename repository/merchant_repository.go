@@ -78,11 +78,16 @@ func (repo *JSONMerchantRepository) SaveMerchants(merchants []models.Merchant) e
 }
 
 func (repo *JSONMerchantRepository) UpdateMerchantBalance(merchants []models.Merchant, merchantID string, amount float64) error {
+	isMerchantExist := false
 	for i, merchant := range merchants {
 		if merchant.ID == merchantID {
 			merchants[i].Balance += amount
+			isMerchantExist = true
 			break
 		}
+	}
+	if !isMerchantExist {
+		return errors.New("merchant not found")
 	}
 
 	err := repo.SaveMerchants(merchants)
