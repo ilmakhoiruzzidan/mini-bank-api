@@ -2,13 +2,11 @@
   {
     "id": "1",
     "username": "customer1",
-    "password": "password",
-    "is_logged_out": false
+    "password": "password"
   },
   {
     "id": "3",
     "username": "customer3",
-    "password": "password",
-    "is_logged_out": true
+    "password": "password"
   }
 ]

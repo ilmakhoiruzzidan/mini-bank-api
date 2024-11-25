@@ -16,12 +16,16 @@ type AuthServiceInterface interface {
 type AuthService struct {
 	customerRepo repository.CustomerRepositoryInterface
 	historyRepo  repository.HistoryRepositoryInterface
+	tokenRepo    repository.TokenRepositoryInterface
 }
 
-func NewAuthService(customerRepo repository.CustomerRepositoryInterface, historyRepo repository.HistoryRepositoryInterface) AuthServiceInterface {
+func NewAuthService(customerRepo repository.CustomerRepositoryInterface,
+	historyRepo repository.HistoryRepositoryInterface,
+	tokenRepo repository.TokenRepositoryInterface) AuthServiceInterface {
 	return &AuthService{
 		customerRepo: customerRepo,
 		historyRepo:  historyRepo,
+		tokenRepo:    tokenRepo,
 	}
 }
 
@@ -31,17 +35,8 @@ func (auth *AuthService) Login(username, password string) (string, error) {
 		return "", errors.New("invalid credentials")
 	}
 
-	if !customer.IsLoggedOut {
-		return "", errors.New("you already logged in")
-	}
-
 	if customer.Username != username || customer.Password != password {
 		return "", errors.New("invalid credentials")
-	}
-
-	err = auth.customerRepo.MarkCustomerAsLoggedIn(username)
-	if err != nil {
-		return "", err
 	}
 
 	// log
@@ -65,26 +60,18 @@ func (auth *AuthService) Logout(token string) error {
 		return err
 	}
 
-	CustomerID, ok := claims["id"].(string)
-	if !ok {
-		return errors.New("failed to parse ID")
+	if auth.tokenRepo.IsTokenRevoked(token) {
+		return errors.New("token already revoked")
 	}
 
-	customer, err := auth.customerRepo.FindCustomerByID(CustomerID)
+	err = auth.tokenRepo.AddToRevocationList(token)
 	if err != nil {
 		return err
 	}
 
-	if customer.IsLoggedOut {
-		return errors.New("you are already logged out")
-	}
-
-	err = auth.historyRepo.LogAction(CustomerID, "logout")
-	if err != nil {
-		return err
-	}
-
-	err = auth.customerRepo.MarkCustomerAsLoggedOut(CustomerID)
+	// Log action
+	customerID, _ := claims["id"].(string)
+	err = auth.historyRepo.LogAction(customerID, "logout")
 	if err != nil {
 		return err
 	}
@@ -113,8 +100,5 @@ func (auth *AuthService) GetCurrentUserInfo(token string) (*models.Customer, err
 		return nil, err
 	}
 
-	if customer.IsLoggedOut {
-		return nil, errors.New("you are already logged out")
-	}
 	return customer, nil
 }

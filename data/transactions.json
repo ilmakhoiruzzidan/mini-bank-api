@@ -68,5 +68,12 @@
     "merchant_id": "1",
     "amount": 220000,
     "timestamp": "2024-11-25T14:15:32.082372903+07:00"
+  },
+  {
+    "transaction_id": "97fa4b3a-cd38-4a06-8335-e8ef53c35785",
+    "sender_id": "1",
+    "merchant_id": "1",
+    "amount": 80000,
+    "timestamp": "2024-11-25T14:55:54.142788405+07:00"
   }
 ]

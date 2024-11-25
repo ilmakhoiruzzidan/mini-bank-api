@@ -12,12 +12,15 @@ import (
 func InitRouter(router *gin.Engine) {
 	router.GET("/", homePage)
 
+	// DI token
+	tokenRepository := repository.NewJSONTokenRepository()
+
 	// DI customer
 	customerRepository := repository.NewJSONCustomerRepository()
 
 	// DI auth
 	historyRepository := repository.NewJSONHistoryRepository()
-	authService := services.NewAuthService(customerRepository, historyRepository)
+	authService := services.NewAuthService(customerRepository, historyRepository, tokenRepository)
 	authHandler := handlers.NewAuthHandler(authService)
 
 	// DI Merchant
@@ -33,7 +36,7 @@ func InitRouter(router *gin.Engine) {
 
 	// protected (need auth)
 	protected := router.Group("/")
-	protected.Use(middlewares.JWTMiddleware(customerRepository))
+	protected.Use(middlewares.JWTMiddleware(tokenRepository))
 	{
 		protected.POST("/auth/logout", authHandler.Logout)
 		protected.GET("/auth/me", authHandler.GetCurrentUser)

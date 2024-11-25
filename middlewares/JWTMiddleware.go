@@ -11,32 +11,26 @@ import (
 	"strings"
 )
 
-func JWTMiddleware(customerRepo repository.CustomerRepositoryInterface) gin.HandlerFunc {
+func JWTMiddleware(repositoryToken repository.TokenRepositoryInterface) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		secretKey := utils.GetSecretKey()
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{
-				"status": http.StatusUnauthorized,
-				"error":  "You need to be logged in",
-			})
+			utils.ErrorResponse(c, http.StatusUnauthorized, "please login first", "")
 			c.Abort()
 			return
 		}
 
 		accessToken := strings.TrimPrefix(authHeader, "Bearer ")
-
 		c.Set("accessToken", accessToken)
-
 		token, err := jwt.Parse(accessToken, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf(
 					"unexpected signing method: %v",
-					token.Header["alg"])
+					token.Header["alg"],
+				)
 			}
-
-			secretKey := []byte(secretKey)
-			return secretKey, nil
+			return []byte(secretKey), nil
 		})
 
 		if err != nil {
@@ -49,42 +43,23 @@ func JWTMiddleware(customerRepo repository.CustomerRepositoryInterface) gin.Hand
 		}
 
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+			if repositoryToken.IsTokenRevoked(accessToken) {
+				utils.ErrorResponse(c, http.StatusUnauthorized, "Token is revoked", "")
+				c.Abort()
+				return
+			}
+
 			customer := &models.Customer{
 				ID:       claims["id"].(string),
 				Username: claims["username"].(string),
 			}
-
-			cust, err := customerRepo.FindCustomerByID(customer.ID)
-			if err != nil {
-				c.JSON(http.StatusUnauthorized, gin.H{
-					"status": http.StatusUnauthorized,
-					"error":  "Customer not found",
-				})
-				c.Abort()
-				return
-			}
-
-			if cust.IsLoggedOut {
-				c.JSON(http.StatusUnauthorized, gin.H{
-					"status": http.StatusUnauthorized,
-					"error":  "You have logged out. Please log in again",
-				})
-				c.Abort()
-				return
-			}
-
 			c.Set("customer", customer)
-
 		} else {
-			c.JSON(http.StatusUnauthorized, gin.H{
-				"status": http.StatusUnauthorized,
-				"error":  "Invalid or expired token",
-			})
+			utils.ErrorResponse(c, http.StatusUnauthorized, "Invalid or expired token", "")
 			c.Abort()
 			return
 		}
 
 		c.Next()
-
 	}
 }
