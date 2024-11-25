@@ -14,8 +14,6 @@ func InitRouter(router *gin.Engine) {
 
 	// DI customer
 	customerRepository := repository.NewJSONCustomerRepository()
-	customerService := services.NewCustomerService(customerRepository)
-	customerHandler := handlers.NewCustomerHandler(customerService)
 
 	// DI auth
 	historyRepository := repository.NewJSONHistoryRepository()
@@ -38,7 +36,7 @@ func InitRouter(router *gin.Engine) {
 	protected.Use(middlewares.JWTMiddleware(customerRepository))
 	{
 		protected.POST("/auth/logout", authHandler.Logout)
-		protected.GET("/customers", customerHandler.GetAllCustomers)
+		protected.GET("/auth/me", authHandler.GetCurrentUser)
 		protected.POST("/transactions", transactionHandler.CreateTransaction)
 
 	}
