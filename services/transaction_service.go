@@ -40,7 +40,6 @@ func (transaction *TransactionService) ProcessTransaction(senderID, merchantID s
 	for _, merchant := range merchants {
 		if merchant.ID == merchantID {
 			merchantExists = true
-
 			break
 		}
 	}

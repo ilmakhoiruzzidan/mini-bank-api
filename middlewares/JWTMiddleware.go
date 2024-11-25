@@ -4,30 +4,16 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
-	"log"
 	"mini-bank-api/models"
 	"mini-bank-api/repository"
+	"mini-bank-api/utils"
 	"net/http"
-	"os"
 	"strings"
 )
 
-func getSecretKey() string {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-
-	secretKey := os.Getenv("JWT_SECRET_KEY")
-	if secretKey == "" {
-		log.Fatal("Error loading JWT_SECRET_KEY file")
-	}
-	return secretKey
-}
-
 func JWTMiddleware(customerRepo repository.CustomerRepositoryInterface) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		secretKey := utils.GetSecretKey()
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{
@@ -49,7 +35,7 @@ func JWTMiddleware(customerRepo repository.CustomerRepositoryInterface) gin.Hand
 					token.Header["alg"])
 			}
 
-			secretKey := []byte(getSecretKey())
+			secretKey := []byte(secretKey)
 			return secretKey, nil
 		})
 

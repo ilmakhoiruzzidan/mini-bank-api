@@ -292,5 +292,17 @@
     "customer_id": "1",
     "action": "payment",
     "timestamp": "2024-11-25T11:49:08.233284849+07:00"
+  },
+  {
+    "id": "b88e9507-90d1-4da8-a899-1f6ecb57f8b0",
+    "customer_id": "1",
+    "action": "logout",
+    "timestamp": "2024-11-25T13:18:38.502956932+07:00"
+  },
+  {
+    "id": "75b66b86-305c-4a42-80d3-0329ebbb8281",
+    "customer_id": "1",
+    "action": "login",
+    "timestamp": "2024-11-25T13:18:43.878155997+07:00"
   }
 ]

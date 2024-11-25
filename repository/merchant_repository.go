@@ -86,7 +86,6 @@ func (repo *JSONMerchantRepository) UpdateMerchantBalance(merchants []models.Mer
 	}
 
 	err := repo.SaveMerchants(merchants)
-
 	if err != nil {
 		return err
 	}

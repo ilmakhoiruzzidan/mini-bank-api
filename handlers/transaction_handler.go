@@ -49,6 +49,7 @@ func (handler *TransactionHandler) CreateTransaction(c *gin.Context) {
 		})
 		return
 	}
+
 	senderID := customer.ID
 	transactionId, err := handler.transactionService.ProcessTransaction(senderID, paymentRequest.MerchantID, paymentRequest.Amount)
 
