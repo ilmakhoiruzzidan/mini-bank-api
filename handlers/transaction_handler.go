@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"mini-bank-api/models"
 	"mini-bank-api/services"
+	"mini-bank-api/utils"
 	"net/http"
 	"time"
 )
@@ -25,28 +26,19 @@ func (handler *TransactionHandler) CreateTransaction(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&paymentRequest); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"status":  http.StatusBadRequest,
-			"message": "Invalid input",
-			"error":   err.Error()})
+		utils.ErrorResponse(c, http.StatusBadRequest, "Invalid input", err.Error())
 		return
 	}
 
 	sender, exists := c.Get("customer")
 	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"status":  http.StatusUnauthorized,
-			"message": "Unauthorized",
-		})
+		utils.ErrorResponse(c, http.StatusUnauthorized, "Unauthorized", "")
 		return
 	}
 
 	customer, ok := sender.(*models.Customer)
 	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"status":  http.StatusInternalServerError,
-			"message": "Failed to retrieve customer",
-		})
+		utils.ErrorResponse(c, http.StatusInternalServerError, "Failed to retrieve customer", "")
 		return
 	}
 
@@ -54,21 +46,16 @@ func (handler *TransactionHandler) CreateTransaction(c *gin.Context) {
 	transactionId, err := handler.transactionService.ProcessTransaction(senderID, paymentRequest.MerchantID, paymentRequest.Amount)
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"status":  http.StatusBadRequest,
-			"message": err.Error()})
+		utils.ErrorResponse(c, http.StatusBadRequest, "Bad Request", err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"status":  http.StatusOK,
-		"message": "Payment successful",
-		"data": gin.H{
+	utils.SuccessResponse(c,
+		gin.H{
 			"transaction_id": transactionId,
 			"sender_id":      senderID,
 			"merchant_id":    paymentRequest.MerchantID,
 			"amount":         paymentRequest.Amount,
 			"timestamp":      time.Now(),
-		},
-	})
+		}, "Payment successful")
 }

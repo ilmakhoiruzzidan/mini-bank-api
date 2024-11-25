@@ -304,5 +304,35 @@
     "customer_id": "1",
     "action": "login",
     "timestamp": "2024-11-25T13:18:43.878155997+07:00"
+  },
+  {
+    "id": "9a2feae0-feab-4a83-8c5d-7c21bb3a142f",
+    "customer_id": "1",
+    "action": "logout",
+    "timestamp": "2024-11-25T13:47:06.317389134+07:00"
+  },
+  {
+    "id": "62100f6f-2621-4ccb-b783-3847e029c265",
+    "customer_id": "1",
+    "action": "login",
+    "timestamp": "2024-11-25T13:47:09.708183731+07:00"
+  },
+  {
+    "id": "45b0ce76-e2e1-4aaa-bffa-fdf93122176f",
+    "customer_id": "1",
+    "action": "login",
+    "timestamp": "2024-11-25T14:00:07.97449695+07:00"
+  },
+  {
+    "id": "28314fd5-c8a0-40d1-ba3a-fb005f84f84f",
+    "customer_id": "1",
+    "action": "payment",
+    "timestamp": "2024-11-25T14:00:24.151434823+07:00"
+  },
+  {
+    "id": "f5213966-7c31-49f7-92e2-88a241f70516",
+    "customer_id": "1",
+    "action": "check profile",
+    "timestamp": "2024-11-25T14:05:20.594982592+07:00"
   }
 ]

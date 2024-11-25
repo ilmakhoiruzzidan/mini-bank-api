@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"mini-bank-api/models"
 	"mini-bank-api/repository"
 	"mini-bank-api/utils"
 )
@@ -9,6 +10,7 @@ import (
 type AuthServiceInterface interface {
 	Login(username, password string) (string, error)
 	Logout(token string) error
+	GetCurrentUserInfo(token string) (*models.Customer, error)
 }
 
 type AuthService struct {
@@ -88,4 +90,30 @@ func (auth *AuthService) Logout(token string) error {
 	}
 
 	return nil
+}
+
+func (auth *AuthService) GetCurrentUserInfo(token string) (*models.Customer, error) {
+	claims, err := utils.ParseToken(token)
+	if err != nil {
+		return nil, err
+	}
+
+	CustomerID, ok := claims["id"].(string)
+	if !ok {
+		return nil, errors.New("failed to parse ID")
+	}
+	customer, err := auth.customerRepo.FindCustomerByID(CustomerID)
+	if err != nil {
+		return nil, err
+	}
+
+	err = auth.historyRepo.LogAction(CustomerID, "check profile")
+	if err != nil {
+		return nil, err
+	}
+
+	if customer.IsLoggedOut {
+		return nil, errors.New("you are already logged out")
+	}
+	return customer, nil
 }

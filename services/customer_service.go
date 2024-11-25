@@ -17,6 +17,6 @@ func NewCustomerService(repo repository.CustomerRepositoryInterface) CustomerSer
 	return &CustomerService{repo: repo}
 }
 
-func (si *CustomerService) GetAllCustomers() ([]models.Customer, error) {
-	return si.repo.LoadAll()
+func (cs *CustomerService) GetAllCustomers() ([]models.Customer, error) {
+	return cs.repo.LoadAll()
 }
