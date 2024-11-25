@@ -102,6 +102,7 @@ func (auth *AuthService) GetCurrentUserInfo(token string) (*models.Customer, err
 	if !ok {
 		return nil, errors.New("failed to parse ID")
 	}
+
 	customer, err := auth.customerRepo.FindCustomerByID(CustomerID)
 	if err != nil {
 		return nil, err
